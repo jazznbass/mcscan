@@ -30,3 +30,6 @@ out <- mcscan(
   alpha_test = TRUE,
   eval_function = eval_function
 )
+
+mcplot(out, caption = FALSE, reverse = FALSE, ylim = NA, marks = 0, ylab = "Tau",
+        statistic_label = c("No effect", "Effect"))

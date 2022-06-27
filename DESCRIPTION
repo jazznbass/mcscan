@@ -12,7 +12,8 @@ Description: An add on package for the scan package that provides functions for
 Depends: 
   R (>= 3.5.0),
   ggplot2,
-  scan
+  scan,
+  tidyr
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
