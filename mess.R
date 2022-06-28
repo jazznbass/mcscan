@@ -1,3 +1,5 @@
+library(mcscan)
+
 design <- design_template(
   n = n_sims,
   start_value = 50,
@@ -12,7 +14,7 @@ design <- design_template(
 iterations <- list(
   A_length = seq(3, 20, by = 2),
   B_length = c(10, 15, 20, 30, 40, 50),
-  n_sims = 20
+  n_sims = 50
 )
 
 eval_function <- "mean"
@@ -23,13 +25,12 @@ methods <- list(
   "Tau-U adjusted" = tau_u_base_es
 )
 
-out <- mcscan(
+out <- mcstudy(
   iterations = iterations,
   design = design,
   method = methods,
-  alpha_test = TRUE,
   eval_function = eval_function
 )
 
-mcplot(out, caption = FALSE, reverse = FALSE, ylim = NA, marks = 0, ylab = "Tau",
-        statistic_label = c("No effect", "Effect"))
+mcplot(out, caption = FALSE, reverse = FALSE, ylim = NA, marks = 0,
+       ylab = "Tau", var_col = NULL)

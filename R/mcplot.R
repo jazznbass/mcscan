@@ -23,11 +23,13 @@ mcplot <- function(data_mc,
                     var_x = 1,
                     var_shape = 2,
                     var_facet = "Method",
+                    var_col = "Statistic",
                     ncol = 2,
                     reverse = FALSE,
                     marks = c(5, 80),
                     ylim = c(0, 100),
                     ylab = "Percentage",
+
                     statistic_label = c("Alpha", "Power")) {
 
   # extract data
@@ -53,25 +55,18 @@ mcplot <- function(data_mc,
       "Trend effect" =  "trend_effect",
       "Intervention effect" =  "level_effect",
       "Initial behavior frequency" = "problemintensity"
-    ) %>%
-    mutate(
-      PowerTau_AB = sapply(data_mc, function(x) x$Power[1]),
-      PowerTau_trendA = sapply(data_mc, function(x) x$Power[2]),
-      PowerTau_trendAB = sapply(data_mc, function(x) x$Power[3]),
-      PowerTau_adj = sapply(data_mc, function(x) x$Power[4]),
-      'AlphaTau_AB' = sapply(data_mc, function(x) x$`Alpha Error`[1]),
-      'AlphaTau_trendA' = sapply(data_mc, function(x) x$`Alpha Error`[2]),
-      'AlphaTau_trendAB' = sapply(data_mc, function(x) x$`Alpha Error`[3]),
-      'AlphaTau_adj' = sapply(data_mc, function(x) x$`Alpha Error`[4])
-    ) %>%
-    pivot_longer(cols = c(starts_with("Power"), starts_with("Alpha")),
-                 names_to = c("Statistic", "Method"),
-                 names_sep = 5,
-                 values_to = "y")
+    )
 
-  #df <- df %>% filter(Statistic == "Power")
+  n_methods <- length(data_mc[[1]]$values)
+  labels_methods <- attr(data_mc[[1]], "row.names")
+  for(i in 1:n_methods) {
+    df[[labels_methods[i]]] <- sapply(data_mc, function(x) x$values[i])
+  }
 
 
+  df <- pivot_longer(df,
+    cols = (ncol(df) - n_methods + 1):ncol(df),
+    names_to = "Method", values_to = "y")
 
   if (is.numeric(var_x)) var_x <- names(df)[var_x]
   if (is.numeric(var_shape)) var_shape <- names(df)[var_shape]
@@ -81,20 +76,13 @@ mcplot <- function(data_mc,
   df[[var_shape]] <- factor(df[[var_shape]])
   df[[var_facet]] <- factor(df[[var_facet]])
 
-  if (reverse) {
-    levels(df[[var_facet]]) <- rev(levels(df[[var_facet]]))
-
+  if (!is.null(var_col)) {
+    aes <- aes(x = !!sym(var_x), y = y, color = !!sym(var_col), shape = !!sym(var_shape))
+  } else {
+    aes <- aes(x = !!sym(var_x), y = y, shape = !!sym(var_shape))
   }
 
-  p <- ggplot(
-    df,
-    aes(
-      x = !!sym(var_x),
-      y = y,
-      color = Statistic,
-      shape = !!sym(var_shape)
-    )
-  )
+  p <- ggplot(df, aes)
 
   if (line_curved) p <- p + geom_smooth(method = "loess", se = FALSE, size = 0.5)
   if (!line_curved) p <- p + geom_line()
@@ -106,9 +94,10 @@ mcplot <- function(data_mc,
   if (!isTRUE(is.na(ylim)))
     p <- p + ylim(ylim[1], ylim[2])
 
-  p <- p + theme_bw() +
-    scale_color_brewer(palette = "Dark2", labels = statistic_label)
-
+  if (!is.null(var_col)) {
+    p <- p + theme_bw() +
+      scale_color_brewer(palette = "Dark2", labels = statistic_label)
+  }
   p <- p + scale_x_continuous(
     breaks = unique(df[[var_x]]),
     limits = c(min(df[[var_x]]), max(df[[var_x]]))
@@ -118,7 +107,7 @@ mcplot <- function(data_mc,
     id <- which(names(df) == var_facet)
     var_facet <- paste0("`", var_facet, "`")
     names(df)[id] <- var_facet
-    p <- p + facet_wrap(var_facet, ncol = ncol,labeller = .label_both)
+    p <- p + facet_wrap(var_facet, ncol = ncol ,labeller = .label_both)
   }
 
   p <- p + ylab(ylab)
@@ -137,8 +126,10 @@ mcplot <- function(data_mc,
   p
 }
 
-.label_both <- function (labels, multi_line = FALSE, sep = ": ")
-{
+.label_both <- function (labels,
+                         multi_line = FALSE,
+                         sep = ": ",
+                         pre = letters){
   value <- label_value(labels, multi_line = multi_line)
   variable <- ggplot2:::label_variable(labels, multi_line = multi_line)
   if (multi_line) {
@@ -156,7 +147,7 @@ mcplot <- function(data_mc,
 
 
   for (i in seq_along(out)) {
-    out[[i]] <- paste0(letters[1:length(out[[i]])], ") ", out[[i]])
+    out[[i]] <- paste0(pre[1:length(out[[i]])], ") ", out[[i]])
   }
 
   out

@@ -12,6 +12,7 @@ mcplot(
   var_x = 1,
   var_shape = 2,
   var_facet = "Method",
+  var_col = "Statistic",
   ncol = 2,
   reverse = FALSE,
   marks = c(5, 80),
