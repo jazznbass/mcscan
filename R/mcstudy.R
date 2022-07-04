@@ -13,7 +13,7 @@
 
 mcstudy <- function(design,
                     iterations,
-                    method,
+                    methods,
                     store_design = FALSE,
                     ...) {
 
@@ -41,7 +41,7 @@ mcstudy <- function(design,
 
     mctab <- mcscan(
       design = new_design,
-      method = method,
+      method = methods,
       design_is_one_study = FALSE,
       ...
     )
@@ -58,7 +58,7 @@ mcstudy <- function(design,
   }
 
   cat("\n")
-
+  attr(out, "methods") <- names(methods)
   attr(out, "iterations") <- iterations
   attr(out, "design") <- design
   attr(out, "computation_duration") <- proc.time() - starttime

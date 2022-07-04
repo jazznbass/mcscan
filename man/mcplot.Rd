@@ -12,13 +12,13 @@ mcplot(
   var_x = 1,
   var_shape = 2,
   var_facet = "Method",
-  var_col = "Statistic",
+  var_col = 3,
   ncol = 2,
   reverse = FALSE,
   marks = c(5, 80),
   ylim = c(0, 100),
   ylab = "Percentage",
-  statistic_label = c("Alpha", "Power")
+  labels_col = c("Alpha", "Power")
 )
 }
 \description{

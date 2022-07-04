@@ -4,7 +4,7 @@
 \alias{mcstudy}
 \title{MC scan}
 \usage{
-mcstudy(design, iterations, method, store_design = FALSE, ...)
+mcstudy(design, iterations, methods, store_design = FALSE, ...)
 }
 \arguments{
 \item{...}{}

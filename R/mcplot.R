@@ -13,7 +13,7 @@
 #' @param marks
 #' @param ylim
 #' @param ylab
-#' @param statistic_label
+#' @param labels_col
 #' @export
 
 mcplot <- function(data_mc,
@@ -23,14 +23,13 @@ mcplot <- function(data_mc,
                     var_x = 1,
                     var_shape = 2,
                     var_facet = "Method",
-                    var_col = "Statistic",
+                    var_col = 3,
                     ncol = 2,
                     reverse = FALSE,
                     marks = c(5, 80),
                     ylim = c(0, 100),
                     ylab = "Percentage",
-
-                    statistic_label = c("Alpha", "Power")) {
+                    labels_col = NULL) {
 
   # extract data
   df <- sapply(data_mc, function(x) unlist(attr(x, "iter"))) %>%
@@ -47,34 +46,36 @@ mcplot <- function(data_mc,
   }
 
   # reorganize data
-  df <- df %>%
-    rn(
-      "Total number of measurement times" = "length",
-      "Number of measurement times phase A" = "A_length",
-      "Number of measurement\ntimes phase B" = "B_length",
-      "Trend effect" =  "trend_effect",
-      "Intervention effect" =  "level_effect",
-      "Initial behavior frequency" = "problemintensity"
-    )
+  #df <- df %>%
+  #  rn(
+  #    "Total number of measurement times" = "length",
+  #    "Number of measurement times phase A" = "A_length",
+  #    "Number of measurement\ntimes phase B" = "B_length",
+  #    "Trend effect" =  "trend_effect",
+  #    "Intervention effect" =  "level_effect",
+  #    "Initial behavior frequency" = "problemintensity"
+  #  )
 
-  n_methods <- length(data_mc[[1]]$values)
-  labels_methods <- attr(data_mc[[1]], "row.names")
-  for(i in 1:n_methods) {
-    df[[labels_methods[i]]] <- sapply(data_mc, function(x) x$values[i])
+  methods <- attr(data_mc, "methods")
+  n_methods <- length(methods)
+  for(i in 1:length(methods)) {
+    df[[methods[i]]] <- sapply(data_mc, function(x) x$values[i])
   }
 
 
   df <- pivot_longer(df,
-    cols = (ncol(df) - n_methods + 1):ncol(df),
+    cols = (ncol(df) - length(methods) + 1):ncol(df),
     names_to = "Method", values_to = "y")
 
   if (is.numeric(var_x)) var_x <- names(df)[var_x]
   if (is.numeric(var_shape)) var_shape <- names(df)[var_shape]
+  if (is.numeric(var_col)) var_col <- names(df)[var_col]
   if (is.numeric(var_facet)) var_facet <- names(df)[var_facet]
 
 
   df[[var_shape]] <- factor(df[[var_shape]])
   df[[var_facet]] <- factor(df[[var_facet]])
+  df[[var_col]] <- factor(df[[var_col]])
 
   if (!is.null(var_col)) {
     aes <- aes(x = !!sym(var_x), y = y, color = !!sym(var_col), shape = !!sym(var_shape))
@@ -96,7 +97,7 @@ mcplot <- function(data_mc,
 
   if (!is.null(var_col)) {
     p <- p + theme_bw() +
-      scale_color_brewer(palette = "Dark2", labels = statistic_label)
+      scale_color_brewer(palette = "Dark2", labels = levels(df[[var_col]]))
   }
   p <- p + scale_x_continuous(
     breaks = unique(df[[var_x]]),
@@ -112,7 +113,7 @@ mcplot <- function(data_mc,
 
   p <- p + ylab(ylab)
 
-  #p <- p + scale_color_manual(labels = statistic_label, values = c("red", "blue"))
+  #p <- p + scale_color_manual(labels = labels_col, values = c("red", "blue"))
 
   if (isTRUE(caption)) {
     design <- attr(data_mc, "design")

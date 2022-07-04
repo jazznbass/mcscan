@@ -4,7 +4,7 @@ design <- design_template(
   n = n_sims,
   start_value = 50,
   s = 10,
-  level = 1,
+  level = level_effect,
   trend = rnorm(n_sims, 0, abs(0.1/(A_length+B_length)) ),
   slope = rnorm(n_sims, 0, abs(0.1/B_length)),
   phase_design = list(A = A_length, B = B_length),
@@ -14,6 +14,7 @@ design <- design_template(
 iterations <- list(
   A_length = seq(3, 20, by = 2),
   B_length = c(10, 15, 20, 30, 40, 50),
+  level_effect = c(0, 1),
   n_sims = 50
 )
 
@@ -32,5 +33,5 @@ out <- mcstudy(
   eval_function = eval_function
 )
 
-mcplot(out, caption = FALSE, reverse = FALSE, ylim = NA, marks = 0,
-       ylab = "Tau", var_col = NULL)
+mcplot(out, caption = FALSE, ylim = NA, marks = 0,
+       ylab = "Tau", var_col = 3)
