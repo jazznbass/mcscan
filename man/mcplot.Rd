@@ -18,7 +18,7 @@ mcplot(
   marks = c(5, 80),
   ylim = c(0, 100),
   ylab = "Percentage",
-  labels_col = c("Alpha", "Power")
+  labels_col = NULL
 )
 }
 \description{

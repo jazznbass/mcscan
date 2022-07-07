@@ -15,10 +15,10 @@ iterations <- list(
   A_length = seq(3, 20, by = 2),
   B_length = c(10, 15, 20, 30, 40, 50),
   level_effect = c(0, 1),
-  n_sims = 50
+  n_sims = 5
 )
 
-eval_function <- "mean"
+eval_function <- function(x) mean(x, na.rm = TRUE)
 methods <- list(
   "Tau-U A vs. B" = tau_u_AB_es,
   "Tau-U trendA" = tau_u_trendA_es,
