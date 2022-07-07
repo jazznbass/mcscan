@@ -1,19 +1,19 @@
 
-#' MC Plot
+#' Monte Carlo plot
 #'
-#' @param data_mc
+#' @param data_mc An object returned from the mcstudy() function.
 #' @param line_curved
 #' @param add_points
 #' @param caption
-#' @param var_x
-#' @param var_shape
-#' @param var_facet
-#' @param ncol
+#' @param var_x Name of the variable to be placed on the x axis.
+#' @param var_shape Name of the variable to be depicted in point shapes.
+#' @param var_facet Name of the variable to create facets.
+#' @param ncol Number of columns for the facets.
 #' @param reverse
-#' @param marks
-#' @param ylim
-#' @param ylab
-#' @param labels_col
+#' @param marks Vector with values for adding horizontal lines.
+#' @param ylim Vector with two values defining the limits for the y axis.
+#' @param ylab Character string with the y axis label.
+#' @param labels_col Labels for the color legend.
 #' @export
 
 mcplot <- function(data_mc,

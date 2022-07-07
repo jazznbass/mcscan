@@ -1,13 +1,10 @@
-#' MC scan
+#' Design frame for a Monte-Carlo study
 #'
-#' @param design
-#' @param iterations
-#' @param method
-#' @param parameter
-#' @param alpha_test
-#' @param power_test
-#' @param store_design
-#' @param ...
+#' @param design A design template created with the design_template() function
+#' @param iterations A list with variables and their iterations.
+#' @param methods A list of functions that analyze the random datasets.
+#' @param store_design If true, the random datasets are stroed in the returned object.
+#' @param ... Further paramters passed to the mcscan() function.
 #'
 #' @export
 
