@@ -15,6 +15,27 @@ mctable <- function(data_mc,
                      second = 2,
                      digits = 0) {
 
+
+  df <- sapply(data_mc, function(x) unlist(attr(x, "iter"))) %>%
+    t() %>%
+    as.data.frame()
+
+  methods <- attr(data_mc, "methods")
+  n_methods <- length(methods)
+  for(i in 1:length(methods)) {
+    df[[methods[i]]] <- sapply(data_mc, function(x) x$values[i])
+  }
+
+
+  df <- pivot_longer(df,
+                     cols = (ncol(df) - length(methods) + 1):ncol(df),
+                     names_to = "Methods", values_to = "y")
+
+
+
+
+  return(df)
+
   # extract data
   df <- sapply(data_mc, function(x) unlist(attr(x, "iter"))) %>%
     t() %>%
@@ -28,31 +49,6 @@ mctable <- function(data_mc,
     }
     df
   }
-
-  # reorganize data
-  df <- df %>%
-    rn(
-      "Measurement times" = "length",
-      "A" = "A_length",
-      "B" = "B_length",
-      "Trend effect" =  "trend_effect",
-      "Intervention effect" =  "level_effect"
-    ) %>%
-    mutate(
-      'Tau<sub>AB</sub>' = sapply(data_mc, function(x) x$Power[1]),
-      'Tau<sub>trendA</sub>' = sapply(data_mc, function(x) x$Power[2]),
-      'Tau<sub>trendA+B</sub>' = sapply(data_mc, function(x) x$Power[3]),
-      'Tau<sub>adj</sub>' = sapply(data_mc, function(x) x$Power[4]),
-      'Tau<sub>AB</sub> ' = sapply(data_mc, function(x) x$`Alpha Error`[1]),
-      'Tau<sub>trendA</sub> ' = sapply(data_mc, function(x) x$`Alpha Error`[2]),
-      'Tau<sub>trendA+B</sub> ' = sapply(data_mc, function(x) x$`Alpha Error`[3]),
-      'Tau<sub>adj</sub> ' = sapply(data_mc, function(x) x$`Alpha Error`[4]),
-      ' Tau<sub>AB</sub> ' = sapply(data_mc, function(x) x$Correct[1]),
-      ' Tau<sub>trendA</sub> ' = sapply(data_mc, function(x) x$Correct[2]),
-      ' Tau<sub>trendA+B</sub> ' = sapply(data_mc, function(x) x$Correct[3]),
-      ' Tau<sub>adj</sub> ' = sapply(data_mc, function(x) x$Correct[4])
-    ) %>%
-    select(-n_sims)
 
   df <- df[order(df[,first], df[,second]),]
 

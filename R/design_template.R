@@ -13,3 +13,6 @@ design_template <- function(...) {
   }
   out
 }
+
+#' @export
+iterations_template <- function(...) as.list(substitute(...()))

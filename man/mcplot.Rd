@@ -2,25 +2,42 @@
 % Please edit documentation in R/mcplot.R
 \name{mcplot}
 \alias{mcplot}
-\title{MC Plot}
+\title{Monte Carlo plot}
 \usage{
 mcplot(
   data_mc,
-  line_curved = FALSE,
   add_points = TRUE,
   caption = FALSE,
   var_x = 1,
   var_shape = 2,
-  var_facet = "Method",
+  var_facet = "Methods",
   var_col = 3,
   ncol = 2,
-  reverse = FALSE,
   marks = c(5, 80),
   ylim = c(0, 100),
   ylab = "Percentage",
   labels_col = NULL
 )
 }
+\arguments{
+\item{data_mc}{An object returned from the mcstudy() function.}
+
+\item{var_x}{Name of the variable to be placed on the x axis.}
+
+\item{var_shape}{Name of the variable to be depicted in point shapes.}
+
+\item{var_facet}{Name of the variable to create facets.}
+
+\item{ncol}{Number of columns for the facets.}
+
+\item{marks}{Vector with values for adding horizontal lines.}
+
+\item{ylim}{Vector with two values defining the limits for the y axis.}
+
+\item{ylab}{Character string with the y axis label.}
+
+\item{labels_col}{Labels for the color legend.}
+}
 \description{
-MC Plot
+Monte Carlo plot
 }

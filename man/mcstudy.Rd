@@ -2,13 +2,21 @@
 % Please edit documentation in R/mcstudy.R
 \name{mcstudy}
 \alias{mcstudy}
-\title{MC scan}
+\title{Design frame for a Monte-Carlo study}
 \usage{
 mcstudy(design, iterations, methods, store_design = FALSE, ...)
 }
 \arguments{
-\item{...}{}
+\item{design}{A design template created with the design_template() function}
+
+\item{iterations}{A list with variables and their iterations.}
+
+\item{methods}{A list of functions that analyze the random datasets.}
+
+\item{store_design}{If true, the random datasets are stroed in the returned object.}
+
+\item{...}{Further paramters passed to the mcscan() function.}
 }
 \description{
-MC scan
+Design frame for a Monte-Carlo study
 }

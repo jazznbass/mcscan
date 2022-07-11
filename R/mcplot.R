@@ -2,14 +2,12 @@
 #' Monte Carlo plot
 #'
 #' @param data_mc An object returned from the mcstudy() function.
-#' @param line_curved
 #' @param add_points
 #' @param caption
 #' @param var_x Name of the variable to be placed on the x axis.
 #' @param var_shape Name of the variable to be depicted in point shapes.
 #' @param var_facet Name of the variable to create facets.
 #' @param ncol Number of columns for the facets.
-#' @param reverse
 #' @param marks Vector with values for adding horizontal lines.
 #' @param ylim Vector with two values defining the limits for the y axis.
 #' @param ylab Character string with the y axis label.
@@ -17,44 +15,22 @@
 #' @export
 
 mcplot <- function(data_mc,
-                    line_curved = FALSE,
-                    add_points = TRUE,
-                    caption = FALSE,
-                    var_x = 1,
-                    var_shape = 2,
-                    var_facet = "Method",
-                    var_col = 3,
-                    ncol = 2,
-                    reverse = FALSE,
-                    marks = c(5, 80),
-                    ylim = c(0, 100),
-                    ylab = "Percentage",
-                    labels_col = NULL) {
+                   add_points = TRUE,
+                   caption = FALSE,
+                   var_x = 1,
+                   var_shape = 2,
+                   var_facet = "Methods",
+                   var_col = 3,
+                   ncol = 2,
+                   marks = c(5, 80),
+                   ylim = c(0, 100),
+                   ylab = "Percentage",
+                   labels_col = NULL) {
 
   # extract data
   df <- sapply(data_mc, function(x) unlist(attr(x, "iter"))) %>%
     t() %>%
     as.data.frame()
-
-  rn <- function(df, ...) {
-    vars <- c(...)
-    for(i in seq_along(vars)) {
-      id <- which(names(df) %in% vars[i])
-      if (length(id) > 0) names(df)[id] <- names(vars[i])
-    }
-    df
-  }
-
-  # reorganize data
-  #df <- df %>%
-  #  rn(
-  #    "Total number of measurement times" = "length",
-  #    "Number of measurement times phase A" = "A_length",
-  #    "Number of measurement\ntimes phase B" = "B_length",
-  #    "Trend effect" =  "trend_effect",
-  #    "Intervention effect" =  "level_effect",
-  #    "Initial behavior frequency" = "problemintensity"
-  #  )
 
   methods <- attr(data_mc, "methods")
   n_methods <- length(methods)
@@ -65,7 +41,7 @@ mcplot <- function(data_mc,
 
   df <- pivot_longer(df,
     cols = (ncol(df) - length(methods) + 1):ncol(df),
-    names_to = "Method", values_to = "y")
+    names_to = "Methods", values_to = "y")
 
   if (is.numeric(var_x)) var_x <- names(df)[var_x]
   if (is.numeric(var_shape)) var_shape <- names(df)[var_shape]
@@ -83,10 +59,10 @@ mcplot <- function(data_mc,
     aes <- aes(x = !!sym(var_x), y = y, shape = !!sym(var_shape))
   }
 
-  p <- ggplot(df, aes)
+  # draw plot --------
 
-  if (line_curved) p <- p + geom_smooth(method = "loess", se = FALSE, size = 0.5)
-  if (!line_curved) p <- p + geom_line()
+  p <- ggplot(df, aes)
+  p <- p + geom_line()
   if (add_points) p <- p + geom_point()
 
   if (!isTRUE(is.na(marks)))
@@ -96,9 +72,11 @@ mcplot <- function(data_mc,
     p <- p + ylim(ylim[1], ylim[2])
 
   if (!is.null(var_col)) {
+    if (is.null(labels_col)) labels_col <- levels(df[[var_col]])
     p <- p + theme_bw() +
-      scale_color_brewer(palette = "Dark2", labels = levels(df[[var_col]]))
+      scale_color_brewer(palette = "Dark2", labels = labels_col)
   }
+
   p <- p + scale_x_continuous(
     breaks = unique(df[[var_x]]),
     limits = c(min(df[[var_x]]), max(df[[var_x]]))
@@ -112,8 +90,6 @@ mcplot <- function(data_mc,
   }
 
   p <- p + ylab(ylab)
-
-  #p <- p + scale_color_manual(labels = labels_col, values = c("red", "blue"))
 
   if (isTRUE(caption)) {
     design <- attr(data_mc, "design")

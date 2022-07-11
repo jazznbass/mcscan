@@ -21,7 +21,18 @@ mcstudy <- function(design,
 
   out <- list()
 
-  iter <- expand.grid(iterations)
+  tmp <- new.env()
+  iter <- list()
+  for(i in seq_along(iterations)) {
+    assign(
+      x = names(iterations)[i],
+      value = eval(iterations[[i]], envir = tmp),
+      pos = tmp
+    )
+    iter[[names(iterations)[i]]] <- eval(iterations[[i]], envir = test)
+  }
+
+  iter <- expand.grid(iter)
 
   mc_env <- new.env()
 
