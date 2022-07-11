@@ -54,7 +54,7 @@ library(kableExtra)
 names(tab)[3:10] <- rep(c("Tau<sub>AB</sub>", "Tau<sub>trendA</sub>", "Tau<sub>trendA+B</sub>",
                           "Tau<sub>adj</sub>"), 2)
 
-kbl(tab, escape = F, row.names = FALSE,digits = 2) %>%
+kable(tab, escape = F, row.names = FALSE,digits = 2) %>%
   kable_classic() %>%
   add_header_above(
     c(" " = 2, "No effect" = 4, "Effect" = 4)
