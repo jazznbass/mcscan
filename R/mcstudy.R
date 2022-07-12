@@ -16,7 +16,6 @@ mcstudy <- function(design,
 
   starttime <- proc.time()
 
-  n_iterations <- prod(sapply(iterations, length))
   counter <- 0
 
   out <- list()
@@ -29,7 +28,7 @@ mcstudy <- function(design,
       value = eval(iterations[[i]], envir = tmp),
       pos = tmp
     )
-    iter[[names(iterations)[i]]] <- eval(iterations[[i]], envir = test)
+    iter[[names(iterations)[i]]] <- eval(iterations[[i]], envir = tmp)
   }
 
   iter <- expand.grid(iter)
@@ -62,7 +61,7 @@ mcstudy <- function(design,
 
     # output remaining time
     counter <- counter + 1
-    .progress_feedback(counter, n_iterations, (proc.time() - starttime)[3])
+    .progress_feedback(counter, nrow(iter), (proc.time() - starttime)[3])
   }
 
   cat("\n")

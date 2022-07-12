@@ -15,7 +15,7 @@ iterations <- iterations_template(
   A_length = seq(3, 20, by = 2),
   B_length = c(10, 15, 20, 30, 40, 50),
   level_effect = c(0, 1),
-  n_sims = 5
+  n_sims = 50
 )
 
 
