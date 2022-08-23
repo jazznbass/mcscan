@@ -1,5 +1,8 @@
 library(mcscan)
 
+
+
+
 design <- design_template(
   n = n_sims,
   start_value = 50,
@@ -15,7 +18,7 @@ iterations <- iterations_template(
   A_length = seq(3, 20, by = 2),
   B_length = c(10, 15, 20, 30, 40, 50),
   level_effect = c(0, 1),
-  n_sims = 50
+  n_sims = 10
 )
 
 
@@ -50,15 +53,30 @@ tab <- mctable(out) %>%
   select(-n_sims)
 
 
-library(kableExtra)
-names(tab)[3:10] <- rep(c("Tau<sub>AB</sub>", "Tau<sub>trendA</sub>", "Tau<sub>trendA+B</sub>",
-                          "Tau<sub>adj</sub>"), 2)
 
-kable(tab, escape = F, row.names = FALSE,digits = 2) %>%
+tab_d <- as.data.frame(tab)
+for(i in 1:nrow(tab2)) {
+  tab_d[i, 3:10] <- convert_r_d(
+    r = convert_tau_r(tab_d[i, 3:10]),
+    nA = tab_d[[1]][i],
+    nB = tab_d[[2]][2]
+  )
+}
+
+
+
+library(kableExtra)
+#names(tab_d)[3:10] <- rep(c("Tau<sub>AB</sub>", "Tau<sub>trendA</sub>", "Tau<sub>trendA+B</sub>",
+#                            "Tau<sub>adj</sub>"), 2)
+
+names(tab_d)[3:10] <- rep(c("d Tau<sub>AB</sub>", "d Tau<sub>trendA</sub>", "d Tau<sub>trendA+B</sub>",
+                          "d Tau<sub>adj</sub>"), 2)
+
+kable(tab_d, escape = F, row.names = FALSE,digits = 2) %>%
   kable_classic() %>%
   add_header_above(
     c(" " = 2, "No effect" = 4, "Effect" = 4)
   )
 
-
+tau_d(0.8, 3, 10)
 
