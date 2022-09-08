@@ -1,4 +1,4 @@
-
+#' @export
 mcscan <- function(design,
                    method = c("plm_level", "rand", "tauU"),
                    remove_slope = FALSE,

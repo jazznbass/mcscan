@@ -13,10 +13,11 @@ mcplot(
   var_facet = "Methods",
   var_col = 3,
   ncol = 2,
-  marks = c(5, 80),
-  ylim = c(0, 100),
-  ylab = "Percentage",
-  labels_col = NULL
+  marks = NULL,
+  ylim = NULL,
+  ylab = "Value",
+  labels_col = NULL,
+  template = NULL
 )
 }
 \arguments{

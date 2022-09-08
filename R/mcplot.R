@@ -22,30 +22,21 @@ mcplot <- function(data_mc,
                    var_facet = "Methods",
                    var_col = 3,
                    ncol = 2,
-                   marks = c(5, 80),
-                   ylim = c(0, 100),
-                   ylab = "Percentage",
-                   labels_col = NULL) {
+                   marks = NULL,
+                   ylim = NULL,
+                   ylab = "Value",
+                   labels_col = NULL,
+                   template = NULL) {
 
   df <- mc_extract(data_mc)
 
-  # # extract data
-  # df <- sapply(data_mc, function(x) unlist(attr(x, "iter"))) %>%
-  #   t() %>%
-  #   as.data.frame()
-  #
-  # methods <- attr(data_mc, "methods")
-  # n_methods <- length(methods)
-  # for(i in 1:length(methods)) {
-  #   df[[methods[i]]] <- sapply(data_mc, function(x) x$values[i])
-  # }
-  #
-  #
-  # df <- pivot_longer(df,
-  #   cols = (ncol(df) - length(methods) + 1):ncol(df),
-  #   names_to = "Methods", values_to = "y")
+  if (identical(template, "power")) {
+    ylim <- c(0, 100)
+    marks <- c(5, 80)
+    ylab <- "Percentage"
+    labels_col <- c("Alpha error", "Power")
+  }
 
-  ##
 
   if (is.numeric(var_x)) var_x <- names(df)[var_x]
   if (is.numeric(var_shape)) var_shape <- names(df)[var_shape]
@@ -69,10 +60,10 @@ mcplot <- function(data_mc,
   p <- p + geom_line()
   if (add_points) p <- p + geom_point()
 
-  if (!isTRUE(is.na(marks)))
+  if (!is.null(marks))
     p <- p + geom_hline(yintercept = marks, size = 0.3, colour = "grey50")
 
-  if (!isTRUE(is.na(ylim)))
+  if (!is.null(ylim))
     p <- p + ylim(ylim[1], ylim[2])
 
   if (!is.null(var_col)) {
