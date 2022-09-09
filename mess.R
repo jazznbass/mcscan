@@ -46,16 +46,18 @@ mcplot(
   var_facet = "B_length"
 )
 
-tab <- mctable(out) %>%
-  pivot_wider(names_from = "level_effect", values_from = "y") %>%
-  pivot_wider(names_from = "Methods", values_from = 5:6) %>%
-  select(-n_sims)
+tab <- mctable(out)
 
+kable(tab,
+      escape = F,
+      row.names = FALSE,
+      digits = 2) %>%
+  kable_classic()
 
 
 tab_d <- as.data.frame(tab)
 for (i in 1:nrow(tab)) {
-  tab_d[i, 3:10] <- convert_r_d(r = convert_tau_r(tab_d[i, 3:10]),
+  tab_d[i, -(1:2)] <- convert_r_d(r = convert_tau_r(tab_d[i, -(1:2)]),
                                 nA = tab_d[[1]][i],
                                 nB = tab_d[[2]][2])
 }
@@ -88,4 +90,4 @@ kable(tab_d,
     "Effect" = 4
   ))
 
-tau_d(0.8, 3, 10)
+convert_tau_r(0.8)

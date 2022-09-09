@@ -6,6 +6,7 @@
 \usage{
 mctable(
   data_mc,
+  wider = NULL,
   caption = TRUE,
   reference_category = 0,
   first = 1,
