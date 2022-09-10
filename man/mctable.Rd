@@ -4,15 +4,7 @@
 \alias{mctable}
 \title{MC Table}
 \usage{
-mctable(
-  data_mc,
-  wider = NULL,
-  caption = TRUE,
-  reference_category = 0,
-  first = 1,
-  second = 2,
-  digits = 0
-)
+mctable(data_mc, wider = NULL, format = "df", digits = 2, label_header = NULL)
 }
 \description{
 MC Table

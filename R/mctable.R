@@ -1,21 +1,13 @@
 #' MC Table
 #'
 #' @param data_mc
-#' @param caption
-#' @param reference_category
-#' @param first
-#' @param second
-#' @param digits
 #' @export
 
 mctable <- function(data_mc,
                     wider = NULL,
-                    caption = TRUE,
-                    reference_category = 0,
-                    first = 1,
-                    second = 2,
-                    digits = 0) {
-
+                    format = "df",
+                    digits = 2,
+                    label_header = NULL) {
 
   df <- mc_extract(data_mc)
 
@@ -27,12 +19,11 @@ mctable <- function(data_mc,
 
   id_var <- names(df)[!names(df) %in% c("Methods", "y")]
 
-  df <- df %>%
-    pivot_wider(names_from = "Methods", values_from = "y")
+  out <- df %>% pivot_wider(names_from = "Methods", values_from = "y")
 
 
   if(!is.null(wider)) {
-    df <- df %>% pivot_wider(
+    out <- out %>% pivot_wider(
       names_from = all_of(wider),
       values_from = all_of(methods),
       names_vary = "slowest"
@@ -40,7 +31,30 @@ mctable <- function(data_mc,
     id_var <- id_var[!id_var %in% wider]
   }
 
-  df
+  if (!is.null(digits)) out <- round(out, digits)
 
+  if (format == "df") return(out)
 
+  if (format == "html") {
+
+    if (!is.null(wider)) {
+      header <- c(" " = length(id_var), "2" = length(methods),
+                  "3" = length(methods)
+      )
+      if (is.null(label_header)) {
+        names(header)[2:3] <- paste(wider, levels(as.factor(df[[wider]])))
+      } else {
+        names(header)[2:3] <- label_header
+      }
+
+      names(out)[(length(id_var) + 1):ncol(out)] <- rep(methods, 2)
+      out <- out %>%
+        knitr::kable(escape = FALSE, row.names = FALSE, align = c("l", rep("c", ncol(out) - 1))) %>%
+        kableExtra::kable_classic() %>%
+        kableExtra::add_header_above(header)
+    }
+    return(out)
+
+  }
+  warning("unknown format")
 }

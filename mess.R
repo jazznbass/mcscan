@@ -46,7 +46,9 @@ mcplot(
   var_facet = "B_length"
 )
 
-tab <- mctable(out)
+mctable(out, format = "html", wider = "level_effect", label_header = c("No effect", "Effect"))
+
+mctable(out, wider = "level_effect") %>% round(1)
 
 kable(tab,
       escape = F,
