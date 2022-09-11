@@ -93,3 +93,14 @@ kable(tab_d,
   ))
 
 convert_tau_r(0.8)
+
+x <- as.list(c(1:10))
+rapply(x, function(x) x*x)
+bench::mark(
+  rapply(x, function(x) x*x),
+  unlist(lapply(x, function(x) x*x)),
+  vapply(x, function(x) x*x,FUN.VALUE = numeric(1)),
+  sapply(x, function(x) x*x),
+  check = FALSE
+)
+rapply(x, function(x) x*x)

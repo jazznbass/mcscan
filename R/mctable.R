@@ -49,8 +49,12 @@ mctable <- function(data_mc,
 
       names(out)[(length(id_var) + 1):ncol(out)] <- rep(methods, 2)
       out <- out %>%
-        knitr::kable(escape = FALSE, row.names = FALSE, align = c("l", rep("c", ncol(out) - 1))) %>%
-        kableExtra::kable_classic() %>%
+        knitr::kable(
+          escape = FALSE,
+          row.names = FALSE,
+          align = c("l", rep("c", ncol(out) - 1))
+        ) %>%
+        kableExtra::kable_classic(full_width = FALSE) %>%
         kableExtra::add_header_above(header)
     }
     return(out)
