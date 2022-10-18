@@ -20,21 +20,31 @@ get_mcfn <- function(x) {
 mcfn <- list(
   tau_u_trendA = function(x) {
     res <- tau_u(x, method = "complete", tau_method = "a", meta_method = "none")$table[[1]]
-    res[which(row.names(res) == "A vs. B - Trend A"), which(names(res) == "p")]
+    list(
+      p = res[which(row.names(res) == "A vs. B - Trend A"), which(names(res) == "p")],
+      es = res[which(row.names(res) == "A vs. B - Trend A"), which(names(res) == "Tau")]
+    )
   },
 
   tau_u_trendA_trendB = function(x) {
     res <- tau_u(x, method = "complete", tau_method = "a", meta_method = "none")$table[[1]]
-    res[which(row.names(res) == "A vs. B + Trend B - Trend A"), which(names(res) == "p")]
+     list(
+      p = res[which(row.names(res) == "A vs. B + Trend B - Trend A"), which(names(res) == "p")],
+      es = res[which(row.names(res) == "A vs. B + Trend B - Trend A"), which(names(res) == "Tau")]
+    )
   },
 
   tau_u_AB = function(x) {
     res <- tau_u(x, method = "complete", tau_method = "a", meta_method = "none")$table[[1]]
-    res[which(row.names(res) == "A vs. B"), which(names(res) == "p")]
+    list(
+      p = res[which(row.names(res) == "A vs. B"), which(names(res) == "p")],
+      es = res[which(row.names(res) == "A vs. B"), which(names(res) == "Tau")]
+    )
   },
 
   tau_u_base = function(x) {
-    corrected_tau(x, continuity = FALSE, repeated = FALSE)$p
+    res <- corrected_tau(x, continuity = FALSE, repeated = FALSE)
+    list(p = res$p, es = res$tau)
   },
 
   tau_u_trendA_es = function(x) {
@@ -60,8 +70,46 @@ mcfn <- list(
     mean(x <= 0.05, na.rm = TRUE) * 100
   },
 
-  mean = function(x) {
-    mean(x, na.rm = TRUE)
+  pos_perc_sig = function(x) {
+    x <- unlist(lapply(x, function(y) {
+      if (y$es <= 0) y$p <- 1
+      y$p
+    }
+    ))
+    mean(x <= 0.05, na.rm = TRUE) * 100
+  },
+
+  neg_perc_sig = function(x) {
+    p <- unlist(lapply(x, function(y) {
+      if (y$es >= 0) y$p <- 1
+      y$p
+    }
+    ))
+    mean(p <= 0.05, na.rm = TRUE) * 100
+  },
+
+  pos_neg_perc_sig = function(x) {
+    x_pos <- unlist(lapply(x, function(y) {
+      if (y$es <= 0) y$p <- 1
+      y$p
+    }
+    ))
+    prop_sig_pos <- mean(x_pos <= 0.05, na.rm = TRUE) * 100
+
+    x_neg <- unlist(lapply(x, function(y) {
+      if (y$es >= 0) y$p <- 1
+      y$p
+    }
+    ))
+    prop_sig_neg <- mean(x_neg <= 0.05, na.rm = TRUE) * 100
+
+    c(pos = prop_sig_pos, neg = prop_sig_neg)
+
+  },
+
+  mean_es = function(x) {
+    es <- unlist(lapply(x, function(y) y$es))
+    mean(es, na.rm = TRUE)
   },
 
   mc_quantile = function(x) {

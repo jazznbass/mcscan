@@ -20,12 +20,15 @@ iterations <- iterations_template(
 
 
 
-eval_function <- get_mcfn("mean")
+eval_function <- get_mcfn("pos_neg_perc_sig")
+
+
+
 methods <- list(
-  'Tau AB' = get_mcfn("tau_u_AB_es"),
-  'Tau trendA' = get_mcfn("tau_u_trendA_es"),
-  'Tau trendA+B' = get_mcfn("tau_u_trendA_trendB_es"),
-  'Tau adj' = get_mcfn("tau_u_base_es")
+  'Tau AB' = get_mcfn("tau_u_AB"),
+  'Tau trendA' = get_mcfn("tau_u_trendA"),
+  'Tau trendA+B' = get_mcfn("tau_u_trendA_trendB"),
+  'Tau adj' = get_mcfn("tau_u_base")
 )
 
 out <- mcstudy(
