@@ -5,7 +5,7 @@
 \alias{mcfn}
 \title{List Object with predefined functions.}
 \format{
-An object of class \code{list} of length 15.
+An object of class \code{list} of length 16.
 }
 \usage{
 mcfn

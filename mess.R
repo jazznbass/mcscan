@@ -20,7 +20,7 @@ iterations <- iterations_template(
 
 
 
-eval_function <- get_mcfn("pos_neg_perc_sig")
+eval_function <- get_mcfn("standard")
 
 
 
@@ -42,6 +42,7 @@ mcplot(
   out,
   caption = FALSE,
   marks = 0,
+  var_y = "es",
   ylab = "Tau",
   var_col = "Methods",
   var_x = "A_length",

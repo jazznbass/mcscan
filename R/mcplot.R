@@ -17,6 +17,7 @@
 mcplot <- function(data_mc,
                    add_points = TRUE,
                    caption = FALSE,
+                   var_y = "p",
                    var_x = 1,
                    var_shape = 2,
                    var_facet = "Methods",
@@ -28,15 +29,15 @@ mcplot <- function(data_mc,
                    labels_col = NULL,
                    template = NULL) {
 
-  df <- mc_extract(data_mc)
-
   if (identical(template, "power")) {
     ylim <- c(0, 100)
     marks <- c(5, 80)
     ylab <- "Percentage"
     labels_col <- c("Alpha error", "Power")
+    var_y <- "p"
   }
 
+  df <- mc_extract(data_mc,var_y = var_y)
 
   if (is.numeric(var_x)) var_x <- names(df)[var_x]
   if (is.numeric(var_shape)) var_shape <- names(df)[var_shape]

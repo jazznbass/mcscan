@@ -5,26 +5,25 @@ mcscan <- function(design,
                    remove_level = FALSE,
                    n_sim = 100,
                    design_is_one_study = TRUE,
-                   eval_function = "perc_sig",
-                   labels = "values") {
+                   eval_function = "standard",
+                   labels = c("p", "es")) {
 
 
   starttime <- proc.time()
 
-  if (identical(eval_function, "perc_sig")) eval_function <- mc_perc_sig
-  if (identical(eval_function, "mean")) eval_function <- mc_mean
+  if (inherits(eval_function, "character")) eval_function <- get_mcfn(eval_function)
 
   mc_fun <- unlist(
     lapply(
       method,
-      function(x) if (inherits(x, "character")) scan:::mc_function(x) else x
+      function(x) if (inherits(x, "character")) get_mcfn(x) else x
     ),
     recursive = FALSE
   )
 
   # return object
-  #out <- data.frame(Method = names(mc_fun))
-  out <- tibble::tibble(Method = names(mc_fun))
+  out <- data.frame(Method = names(mc_fun))
+  #out <- tibble::tibble(Method = names(mc_fun))
 
   # remove effects
 
@@ -44,7 +43,7 @@ mcscan <- function(design,
 
   # mc calculation ----------
 
-  mc_tab <- mcscan:::.mc_scdf(
+  mc_tab <- .mc_scdf(
     design = design,
     n_sim = n_sim,
     methods = mc_fun,
@@ -52,8 +51,8 @@ mcscan <- function(design,
     eval_function = eval_function
   )
 
-  out <- cbind(out, mc_tab)
-  #out <- dplyr::bind_cols(out, t(mc_tab))
+
+  out <- cbind(out, t(as.data.frame(mc_tab)))
 
   if(!identical(labels, NA)) names(out)[2:(length(labels) + 1)] <- labels
 

@@ -8,6 +8,7 @@ mcplot(
   data_mc,
   add_points = TRUE,
   caption = FALSE,
+  var_y = "p",
   var_x = 1,
   var_shape = 2,
   var_facet = "Methods",

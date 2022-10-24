@@ -66,7 +66,17 @@ mcfn <- list(
     corrected_tau(x, continuity = FALSE, repeated = FALSE)$tau
   },
 
+
+  standard = function(x) {
+
+    p <- unlist(lapply(x, function(y) y$p))
+    es <- unlist(lapply(x, function(y) y$es))
+    c(p = mean(p <= 0.05, na.rm = TRUE) * 100, es = mean(es, na.rm = TRUE))
+  },
+
   perc_sig = function(x) {
+
+    x <- unlist(lapply(x, function(y) y$p))
     mean(x <= 0.05, na.rm = TRUE) * 100
   },
 
