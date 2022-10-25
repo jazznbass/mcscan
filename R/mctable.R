@@ -7,9 +7,10 @@ mctable <- function(data_mc,
                     wider = NULL,
                     format = "df",
                     digits = 2,
+                    var_y = "p",
                     label_header = NULL) {
 
-  df <- mc_extract(data_mc)
+  df <- mc_extract(data_mc, var_y = var_y)
 
   methods <- unique(df$Methods)
 
