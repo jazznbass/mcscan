@@ -18,12 +18,6 @@ iterations <- iterations_template(
   n_sims = 10
 )
 
-
-
-eval_function <- get_mcfn("standard")
-
-
-
 methods <- list(
   'Tau AB' = get_mcfn("tau_u_AB"),
   'Tau trendA' = get_mcfn("tau_u_trendA"),
@@ -34,8 +28,7 @@ methods <- list(
 out <- mcstudy(
   iterations = iterations,
   design = design,
-  method = methods,
-  eval_function = eval_function
+  method = methods
 )
 
 mcplot(

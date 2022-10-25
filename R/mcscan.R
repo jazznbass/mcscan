@@ -6,7 +6,7 @@ mcscan <- function(design,
                    n_sim = 100,
                    design_is_one_study = TRUE,
                    eval_function = "standard",
-                   labels = c("p", "es")) {
+                   labels = NA) {
 
 
   starttime <- proc.time()
