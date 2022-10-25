@@ -48,7 +48,7 @@ mctable <- function(data_mc,
         names(header)[2:3] <- label_header
       }
 
-      names(out)[(length(id_var) + 1):ncol(out)] <- rep(methods, 2)
+      names(out)[(length(id_var) + 1):ncol(out)] <- rep(as.character(methods), 2)
       out <- out %>%
         knitr::kable(
           escape = FALSE,

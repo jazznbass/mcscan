@@ -18,11 +18,36 @@ iterations <- iterations_template(
   n_sims = 10
 )
 
-methods <- list(
-  'Tau AB' = get_mcfn("tau_u_AB"),
-  'Tau trendA' = get_mcfn("tau_u_trendA"),
-  'Tau trendA+B' = get_mcfn("tau_u_trendA_trendB"),
-  'Tau adj' = get_mcfn("tau_u_base")
+
+tau_u_a_B <- function(x) {
+  res <- tau_u(x, method = "parker", tau_method = "a", meta_method = "none")$table[[1]]
+  list(
+    p = res[which(row.names(res) == "A vs. B"), which(names(res) == "p")],
+    es = res[which(row.names(res) == "A vs. B"), which(names(res) == "Tau")]
+  )
+}
+
+tau_u_a_B_ta <- function(x) {
+  res <- tau_u(x, method = "parker", tau_method = "a", meta_method = "none")$table[[1]]
+  list(
+    p = res[which(row.names(res) == "A vs. B - Trend A"), which(names(res) == "p")],
+    es = res[which(row.names(res) == "A vs. B - Trend A"), which(names(res) == "Tau")]
+  )
+}
+
+tau_u_a_B_ta_tb <- function(x) {
+  res <- tau_u(x, method = "parker", tau_method = "a", meta_method = "none")$table[[1]]
+  list(
+    p = res[which(row.names(res) == "A vs. B + Trend B - Trend A"), which(names(res) == "p")],
+    es = res[which(row.names(res) == "A vs. B + Trend B - Trend A"), which(names(res) == "Tau")]
+  )
+}
+
+methods = list(
+  "Tau-U A vs. B" = tau_u_a_B,
+  "Tau-U - trendA" = tau_u_a_B_ta,
+  "Tau-U - trendA + trendB" = tau_u_a_B_ta_tb,
+  "Tau-U adjusted" = get_mcfn("tau_u_base")
 )
 
 out <- mcstudy(
@@ -30,6 +55,11 @@ out <- mcstudy(
   design = design,
   method = methods
 )
+
+
+mcplot(out, template = "power")
+mctable(out, wider = "level_effect", format = "html", digits = 0)
+
 
 mcplot(
   out,

@@ -18,7 +18,7 @@ mc_extract <- function(data_mc, var_y) {
     names_to = "Methods",
     values_to = "y"
   )
-  df$Methods <- as.factor(df$Methods)
+  df$Methods <- factor(df$Methods, levels = unique(df$Methods))
 
   df
 
