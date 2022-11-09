@@ -4,7 +4,14 @@
 \alias{mcstudy}
 \title{Design frame for a Monte-Carlo study}
 \usage{
-mcstudy(design, iterations, methods, store_design = FALSE, ...)
+mcstudy(
+  design,
+  iterations,
+  methods,
+  store_design = FALSE,
+  rf_arguments = list(),
+  ...
+)
 }
 \arguments{
 \item{design}{A design template created with the design_template() function}

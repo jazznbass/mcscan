@@ -6,6 +6,7 @@ mcscan <- function(design,
                    n_sim = 100,
                    design_is_one_study = TRUE,
                    eval_function = "standard",
+                   rf_arguments = rf_arguments,
                    labels = NA) {
 
 
@@ -48,7 +49,8 @@ mcscan <- function(design,
     n_sim = n_sim,
     methods = mc_fun,
     design_is_one_study = design_is_one_study,
-    eval_function = eval_function
+    eval_function = eval_function,
+    rf_arguments = rf_arguments
   )
 
 
@@ -66,13 +68,18 @@ mcscan <- function(design,
                      n_sim,
                      methods,
                      design_is_one_study,
-                     eval_function) {
+                     eval_function,
+                     rf_arguments = list()) {
 
   # Genrate random sample ----------------------------------------------------
   rand_sample <- list()
 
   if (design_is_one_study) {
-    for(i in 1:n_sim) rand_sample[[i]] <- random_scdf(design = design)
+    #for(i in 1:n_sim) rand_sample[[i]] <- random_scdf(design = design)
+    for(i in 1:n_sim) {
+      rand_sample[[i]] <- do.call(random_scdf,
+                                  c(list(design = design, rf_arguments)))
+    }
   }
 
   if (!design_is_one_study) {

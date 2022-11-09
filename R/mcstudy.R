@@ -12,6 +12,7 @@ mcstudy <- function(design,
                     iterations,
                     methods,
                     store_design = FALSE,
+                    rf_arguments = list(),
                     ...) {
 
   starttime <- proc.time()
