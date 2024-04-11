@@ -3,10 +3,10 @@ mcscan <- function(design,
                    method = c("plm_level", "rand", "tauU"),
                    remove_slope = FALSE,
                    remove_level = FALSE,
-                   n_sim = 100,
+                   n_sims = 100,
                    design_is_one_study = TRUE,
                    eval_function = "standard",
-                   rf_arguments = rf_arguments,
+                   rf_arguments = NULL,
                    labels = NA) {
 
 
@@ -46,46 +46,46 @@ mcscan <- function(design,
 
   mc_tab <- .mc_scdf(
     design = design,
-    n_sim = n_sim,
+    n_sims = n_sims,
     methods = mc_fun,
     design_is_one_study = design_is_one_study,
     eval_function = eval_function,
     rf_arguments = rf_arguments
   )
 
-
-  out <- cbind(out, t(as.data.frame(mc_tab)))
+  mc_tab <- t(as.data.frame(mc_tab))
+  out <- cbind(out, mc_tab)
 
   if(!identical(labels, NA)) names(out)[2:(length(labels) + 1)] <- labels
 
   attr(out, "methods") <- names(method)
   attr(out, "computation_duration") <- proc.time() - starttime
-  #class(out) <- c("mcscan")
+
   out
 }
 
 .mc_scdf <- function(design,
-                     n_sim,
+                     n_sims,
                      methods,
                      design_is_one_study,
                      eval_function,
-                     rf_arguments = list()) {
+                     rf_arguments = NULL) {
 
   # Genrate random sample ----------------------------------------------------
   rand_sample <- list()
 
   if (design_is_one_study) {
-    #for(i in 1:n_sim) rand_sample[[i]] <- random_scdf(design = design)
-    for(i in 1:n_sim) {
+    for(i in 1:n_sims) {
       rand_sample[[i]] <- do.call(random_scdf,
-                                  c(list(design = design, rf_arguments)))
+                                  c(list(design = design), rf_arguments))
     }
   }
 
   if (!design_is_one_study) {
-    tmp <- random_scdf(design = design)
+    tmp <- do.call(random_scdf, c(list(design = design), rf_arguments))
     for (i in seq_along(tmp)) rand_sample[[i]] <- tmp[i]
   }
+
 
   # analyse random sample ---------------------------------------------------
 

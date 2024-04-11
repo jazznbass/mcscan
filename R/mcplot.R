@@ -37,12 +37,36 @@ mcplot <- function(data_mc,
     var_y <- "p"
   }
 
-  df <- mc_extract(data_mc,var_y = var_y)
+  df <- mc_extract(data_mc, var_y = var_y)
 
   if (is.numeric(var_x)) var_x <- names(df)[var_x]
   if (is.numeric(var_shape)) var_shape <- names(df)[var_shape]
   if (is.numeric(var_col)) var_col <- names(df)[var_col]
   if (is.numeric(var_facet)) var_facet <- names(df)[var_facet]
+
+
+  if (!is.null(names(var_facet))) {
+    names(df)[which(names(df) == var_facet)] <- names(var_facet)
+    var_facet <- names(var_facet)
+  }
+  if (!is.null(names(var_col))) {
+    names(df)[which(names(df) == var_col)] <- names(var_col)
+    var_col <- names(var_col)
+  }
+
+  if (!is.null(names(var_shape))) {
+    names(df)[which(names(df) == var_shape)] <- names(var_shape)
+    var_shape <- names(var_shape)
+  }
+
+  if (!is.null(names(var_x))) {
+    names(df)[which(names(df) == var_x)] <- names(var_x)
+    var_x <- names(var_x)
+  }
+
+  if (!is.null(names(var_y))) {
+    ylab <- names(var_y)
+  }
 
 
   df[[var_shape]] <- factor(df[[var_shape]])
@@ -62,7 +86,7 @@ mcplot <- function(data_mc,
   if (add_points) p <- p + geom_point()
 
   if (!is.null(marks))
-    p <- p + geom_hline(yintercept = marks, size = 0.3, colour = "grey50")
+    p <- p + geom_hline(yintercept = marks, linewidth = 0.3, colour = "grey50")
 
   if (!is.null(ylim))
     p <- p + ylim(ylim[1], ylim[2])

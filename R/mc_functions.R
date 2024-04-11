@@ -77,7 +77,7 @@ mcfn <- list(
   perc_sig = function(x) {
 
     x <- unlist(lapply(x, function(y) y$p))
-    mean(x <= 0.05, na.rm = TRUE) * 100
+    c(p = mean(x <= 0.05, na.rm = TRUE) * 100)
   },
 
   pos_perc_sig = function(x) {
@@ -86,7 +86,7 @@ mcfn <- list(
       y$p
     }
     ))
-    mean(x <= 0.05, na.rm = TRUE) * 100
+    c(p = mean(x <= 0.05, na.rm = TRUE) * 100)
   },
 
   neg_perc_sig = function(x) {
@@ -95,7 +95,7 @@ mcfn <- list(
       y$p
     }
     ))
-    mean(p <= 0.05, na.rm = TRUE) * 100
+    c(p = mean(p <= 0.05, na.rm = TRUE) * 100)
   },
 
   pos_neg_perc_sig = function(x) {
@@ -119,7 +119,7 @@ mcfn <- list(
 
   mean_es = function(x) {
     es <- unlist(lapply(x, function(y) y$es))
-    mean(es, na.rm = TRUE)
+    c(es = mean(es, na.rm = TRUE))
   },
 
   mc_quantile = function(x) {

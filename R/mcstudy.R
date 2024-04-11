@@ -12,7 +12,8 @@ mcstudy <- function(design,
                     iterations,
                     methods,
                     store_design = FALSE,
-                    rf_arguments = list(),
+                    rf_arguments = NULL,
+                    n_sims = 100,
                     ...) {
 
   starttime <- proc.time()
@@ -50,7 +51,8 @@ mcstudy <- function(design,
     mctab <- mcscan(
       design = new_design,
       method = methods,
-      design_is_one_study = FALSE,
+      n_sims = n_sims,
+      rf_arguments = rf_arguments,
       ...
     )
 

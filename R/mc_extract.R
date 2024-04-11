@@ -1,6 +1,6 @@
 
 #' @export
-mc_extract <- function(data_mc, var_y) {
+mc_extract <- function(data_mc, var_y, label_methods = "Methods") {
 
   df <- sapply(data_mc, function(x) unlist(attr(x, "iter"))) %>%
     t() %>%
@@ -15,10 +15,10 @@ mc_extract <- function(data_mc, var_y) {
   df <- pivot_longer(
     df,
     cols = (ncol(df) - length(methods) + 1):ncol(df),
-    names_to = "Methods",
+    names_to = label_methods,
     values_to = "y"
   )
-  df$Methods <- factor(df$Methods, levels = unique(df$Methods))
+  df[[label_methods]] <- factor(df[[label_methods]], levels = unique(df[[label_methods]]))
 
   df
 

@@ -9,7 +9,8 @@ mcstudy(
   iterations,
   methods,
   store_design = FALSE,
-  rf_arguments = list(),
+  rf_arguments = NULL,
+  n_sims = 100,
   ...
 )
 }
