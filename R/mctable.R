@@ -22,9 +22,9 @@ mctable <- function(data_mc,
 
   id_var <- names(df)[!names(df) %in% c("Methods", "y")]
 
-  if (multiple_methods) {
-    out <- df %>% pivot_wider(names_from = "Methods", values_from = "y")
-  }
+  out <- if (multiple_methods) {
+    df %>% pivot_wider(names_from = "Methods", values_from = "y")
+  } else df
 
   if(!is.null(wider)) {
     if (multiple_methods) {
