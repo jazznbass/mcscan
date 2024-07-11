@@ -71,13 +71,15 @@ mcscan <- function(design,
                      eval_function,
                      rf_arguments = NULL) {
 
-  # Genrate random sample ----------------------------------------------------
+  # Generate random sample ----------------------------------------------------
   rand_sample <- list()
 
   if (design_is_one_study) {
     for(i in 1:n_sims) {
-      rand_sample[[i]] <- do.call(random_scdf,
-                                  c(list(design = design), rf_arguments))
+      rand_sample[[i]] <- do.call(
+        random_scdf,
+        c(list(design = design), rf_arguments)
+      )
     }
   }
 

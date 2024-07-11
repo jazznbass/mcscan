@@ -14,25 +14,42 @@ mctable <- function(data_mc,
 
   methods <- unique(df$Methods)
 
+  multiple_methods <- if (length(methods) == 1) FALSE else TRUE
+
   filter <- names(df)[apply(df, 2, function(x) length(unique(x)) != 1)]
   if (!"Methods" %in% names(df)) filter <- c(filter, "Methods")
   df <- df[, filter]
 
   id_var <- names(df)[!names(df) %in% c("Methods", "y")]
 
-  out <- df %>% pivot_wider(names_from = "Methods", values_from = "y")
-
+  if (multiple_methods) {
+    out <- df %>% pivot_wider(names_from = "Methods", values_from = "y")
+  }
 
   if(!is.null(wider)) {
-    out <- out %>% pivot_wider(
-      names_from = all_of(wider),
-      values_from = all_of(methods),
-      names_vary = "slowest"
-    )
+    if (multiple_methods) {
+      out <- out %>% pivot_wider(
+        names_from = all_of(wider),
+        values_from = all_of(methods),
+        names_vary = "slowest"
+      )
+    }
+
+    if (!multiple_methods) {
+      out <- out %>% pivot_wider(
+        names_from = all_of(wider),
+        values_from = "y",
+        names_vary = "slowest"
+      )
+    }
+
     id_var <- id_var[!id_var %in% wider]
   }
 
-  if (!is.null(digits)) out <- round(out, digits)
+  if (!is.null(digits)) {
+    out <- out %>% mutate(across(where(is.numeric), ~ round(.x, digits)))
+    #out <- round(out, digits)
+  }
 
   if (format == "df") return(out)
 
