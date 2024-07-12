@@ -63,8 +63,11 @@ mcstudy <- function(design,
     out <- c(out, list(mctab))
 
     # output remaining time
-    counter <- counter + 1
-    .progress_feedback(counter, nrow(iter), (proc.time() - starttime)[3])
+
+    if (getOption("mcscan.progress.monitor")) {
+      counter <- counter + 1
+      .progress_feedback(counter, nrow(iter), (proc.time() - starttime)[3])
+    }
   }
 
   cat("\n")

@@ -1,6 +1,6 @@
-#' MC Table
+#' Result table for mcstudy
 #'
-#' @param data_mc
+#' @param data_mc Return from the mcstudy function
 #' @export
 
 mctable <- function(data_mc,
@@ -48,7 +48,6 @@ mctable <- function(data_mc,
 
   if (!is.null(digits)) {
     out <- out %>% mutate(across(where(is.numeric), ~ round(.x, digits)))
-    #out <- round(out, digits)
   }
 
   if (format == "df") return(out)

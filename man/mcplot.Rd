@@ -24,6 +24,10 @@ mcplot(
 \arguments{
 \item{data_mc}{An object returned from the mcstudy() function.}
 
+\item{add_points}{If TRUE, lines get a plot.}
+
+\item{caption}{TRUE or FALSE.}
+
 \item{var_x}{Name of the variable to be placed on the x axis.}
 
 \item{var_shape}{Name of the variable to be depicted in point shapes.}

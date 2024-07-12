@@ -2,7 +2,7 @@
 % Please edit documentation in R/mctable.R
 \name{mctable}
 \alias{mctable}
-\title{MC Table}
+\title{Result table for mcstudy}
 \usage{
 mctable(
   data_mc,
@@ -13,6 +13,9 @@ mctable(
   label_header = NULL
 )
 }
+\arguments{
+\item{data_mc}{Return from the mcstudy function}
+}
 \description{
-MC Table
+Result table for mcstudy
 }

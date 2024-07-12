@@ -1,9 +1,8 @@
-
 #' Monte Carlo plot
 #'
 #' @param data_mc An object returned from the mcstudy() function.
-#' @param add_points
-#' @param caption
+#' @param add_points If TRUE, lines get a plot.
+#' @param caption TRUE or FALSE.
 #' @param var_x Name of the variable to be placed on the x axis.
 #' @param var_shape Name of the variable to be depicted in point shapes.
 #' @param var_facet Name of the variable to create facets.

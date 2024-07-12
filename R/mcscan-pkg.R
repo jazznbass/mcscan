@@ -1,0 +1,46 @@
+#' Monte-Carlo studies for single-case analyses (scan)
+#'
+#' @name mcscan-package
+#' @aliases mcscan-package mcscan
+#' @author Juergen Wilbert \[aut, cre\]
+#' @import knitr
+#' @import kableExtra
+#' @keywords internal
+#' @examples
+#' options("mcscan.progress.monitor" = FALSE)
+#'
+#' mc_function <- function(scdf) {
+#'   res <- rand_test(scdf, number = 100)
+#'   res$p.value
+#' }
+#' evaluation <- function(x) {
+#'   c(p = mean(x <= 0.05, na.rm = TRUE) * 100)
+#' }
+#'
+#' design <- design_template(
+#'   level = level_effect * statistic,
+#'   trend = 0,
+#'   slope = 0,
+#'   phase_design = list(A_length, B = B_length),
+#'   distribution = "gaussian"
+#' )
+#'
+#' iterations <- iterations_template(
+#'   A_length = c(5, 10, 15),
+#'   B_length = c(10, 15, 20),
+#'   level_effect = c(0.5, 1.0),
+#'   statistic = c(0, 1)
+#' )
+#'
+#' res <- mcstudy(
+#'   design = design,
+#'   iterations = iterations,
+#'   methods = list("Randomization mean difference" = mc_function),
+#'   eval_function = evaluation,
+#'   n_sims = 10
+#' )
+#'
+#' mcplot(res, var_col = "statistic", var_facet = "level_effect")
+#' mctable(res, wider = "statistic", format = "html")
+#'
+"_PACKAGE"
